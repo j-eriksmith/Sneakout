@@ -20,6 +20,7 @@ void AHunterCharacter::BeginPlay()
 float AHunterCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	// Disable this lad
+	
 	return 0.0f;
 }
 
@@ -33,6 +34,8 @@ void AHunterCharacter::Tick(float DeltaTime)
 // Called to bind functionality to input
 void AHunterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+
+
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }

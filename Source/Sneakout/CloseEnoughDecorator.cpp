@@ -10,12 +10,6 @@ UCloseEnoughDecorator::UCloseEnoughDecorator()
 	bNotifyTick = true;
 }
 
-void UCloseEnoughDecorator::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) 
-{
-	//CalculateRawConditionValue(OwnerComp, NodeMemory);
-}
-
-
 bool UCloseEnoughDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8 * NodeMemory) const
 {
 	// Todo: pull state maniulation into a different callback
@@ -24,6 +18,7 @@ bool UCloseEnoughDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& O
 	FVector TargetLocation = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(TargetToFollow.SelectedKeyName))->GetActorLocation();
 	FVector OurLocation = AIController->GetPawn()->GetActorLocation();
 
-	//UE_LOG(LogTemp, Warning, TEXT("distance: %f"), FVector::Dist(OurLocation, TargetLocation));
+	UE_LOG(LogTemp, Warning, TEXT("distance: %f"), FVector::Dist(OurLocation, TargetLocation));
 	return FVector::Dist(OurLocation, TargetLocation) >= FollowDistance;
+	//return false;
 }

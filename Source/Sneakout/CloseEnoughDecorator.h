@@ -24,6 +24,5 @@ public:
 	float FollowDistance;
 
 protected:
-	void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8 * NodeMemory) const override;
 };

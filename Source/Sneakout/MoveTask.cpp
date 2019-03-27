@@ -33,5 +33,6 @@ EBTNodeResult::Type UMoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 			UE_LOG(LogTemp, Warning, TEXT("Default Case - Failed"));
 			return EBTNodeResult::Failed;
 	}
-	
 }
+
+

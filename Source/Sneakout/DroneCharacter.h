@@ -4,47 +4,38 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Classes/Camera/CameraComponent.h"
-#include "SneakCharacter.generated.h"
+#include "DroneCharacter.generated.h"
 
 UCLASS()
-class SNEAKOUT_API ASneakCharacter : public ACharacter
+class SNEAKOUT_API ADroneCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ASneakCharacter();
+	ADroneCharacter();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	APawn * Player;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input when Character is possessed by Controller
+	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION() // TODO: try without these
+	void RegisterPlayer(APawn* Player);
+
+	UFUNCTION() 
 	void MoveForward(float Value);
 
 	UFUNCTION()
 	void MoveRight(float Value);
 
 	UFUNCTION()
-	void Shoot();
-
-	UFUNCTION()
 	void Swap();
-
-	UPROPERTY(VisibleAnywhere) // Non-editable value, but exposed in editor
-	UCameraComponent* FPCameraComponent;
-
-	UPROPERTY(VisibleDefaultsOnly) // Instances will not see this in-editor
-	USkeletalMeshComponent* FPMesh;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ADroneCharacter> DroneClass;
 };

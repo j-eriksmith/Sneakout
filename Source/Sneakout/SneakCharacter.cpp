@@ -3,6 +3,7 @@
 #include "SneakCharacter.h"
 #include "Classes/Components/CapsuleComponent.h"
 #include "Classes/Components/SkeletalMeshComponent.h"
+#include "DroneCharacter.h" 
 #include "Engine.h"
 
 // Sets default values
@@ -56,6 +57,7 @@ void ASneakCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis("LookUp", this, &ASneakCharacter::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ASneakCharacter::Shoot);
+	PlayerInputComponent->BindAction("Swap", IE_Pressed, this, &ASneakCharacter::Swap);
 }
 
 void ASneakCharacter::MoveForward(float Value)
@@ -95,6 +97,16 @@ void ASneakCharacter::Shoot()
 		{
 			HitResult.GetComponent()->AddImpulseAtLocation(FVector(0.f,0.f,1.f) * 10000.0f, HitResult.Location);
 		}
+	}
+}
 
+void ASneakCharacter::Swap()
+{
+	// If this is the first time swapping, spawn the drone 
+	ADroneCharacter* Drone = GetWorld()->SpawnActor<ADroneCharacter>(DroneClass, FVector(0.f,0.f,0.f), this->GetViewRotation());
+	Drone->RegisterPlayer(this);
+	if (Drone)
+	{
+		GetController()->Possess(Drone);
 	}
 }
