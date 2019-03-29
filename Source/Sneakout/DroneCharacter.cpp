@@ -22,7 +22,6 @@ ADroneCharacter::ADroneCharacter()
 
 	FPCameraComponent->SetupAttachment(GetCapsuleComponent());
 	// Similar to localPosition 
-	FPCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f + BaseEyeHeight));
 	FPCameraComponent->bUsePawnControlRotation = true;
 }
 
@@ -30,7 +29,7 @@ ADroneCharacter::ADroneCharacter()
 void ADroneCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetMesh()->SetOwnerNoSee(true);
 }
 
 // Called every frame

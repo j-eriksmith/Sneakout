@@ -21,7 +21,7 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	}
 	// Filter out other objects of this class
 	// Todo: cache this out once found once
-	if (ActorsToIgnore.Num() == 0)
+	if (ActorsToIgnore.Num() <= 1)
 	{
 		TArray<AActor*> ResultDrones;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AIClass, ActorsToIgnore);

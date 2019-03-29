@@ -25,7 +25,6 @@ ASneakCharacter::ASneakCharacter()
 	// By default, this will parent to the root Capsule Component
 	FPMesh->SetupAttachment(FPCameraComponent);
 	FPMesh->CastShadow = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -33,13 +32,13 @@ void ASneakCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetMesh()->SetOwnerNoSee(true);
+	Drone = GetWorld()->SpawnActor<ADroneCharacter>(DroneClass, FVector(0.f,0.f,0.f), GetViewRotation());
 }
 
 // Called every frame
 void ASneakCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -75,13 +74,9 @@ void ASneakCharacter::MoveRight(float Value)
 void ASneakCharacter::Swap()
 {
 	// If this is the first time swapping, spawn the drone 
-	if (!Drone)
-	{
-		Drone = GetWorld()->SpawnActor<ADroneCharacter>(DroneClass, FVector(0.f,0.f,0.f), this->GetViewRotation());
-		Drone->RegisterPlayer(this);
-	}
 	if (Drone)
 	{
+		Drone->RegisterPlayer(this);
 		GetController()->Possess(Drone);
 	}
 }
