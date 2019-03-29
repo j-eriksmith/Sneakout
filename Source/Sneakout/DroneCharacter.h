@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Classes/Camera/CameraComponent.h"
 #include "DroneCharacter.generated.h"
 
 UCLASS()
@@ -21,12 +22,17 @@ protected:
 
 	APawn * Player;
 
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* FPCameraComponent;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void PossessedBy(AController* NewController) override;
 
 	void RegisterPlayer(APawn* Player);
 
@@ -35,6 +41,9 @@ public:
 
 	UFUNCTION()
 	void MoveRight(float Value);
+	
+	UFUNCTION()
+	void Shoot();
 
 	UFUNCTION()
 	void Swap();

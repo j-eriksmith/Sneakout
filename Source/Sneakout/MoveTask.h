@@ -26,7 +26,6 @@ public:
 
 	AHunterController* AIController;
 
-	APawn* AIControlledPawn;
 protected:
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "HunterController.h"
 #include "HunterCharacter.generated.h"
+
 
 UCLASS()
 class SNEAKOUT_API AHunterCharacter : public ACharacter

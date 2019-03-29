@@ -15,7 +15,6 @@ EBTNodeResult::Type UMoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 	if (!AIController)
 	{
 		AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
-		AIControlledPawn = AIController->GetPawn();
 	}
 
 	AActor* MoveTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(TargetToFollow.SelectedKeyName));

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Classes/Camera/CameraComponent.h"
+#include "DroneCharacter.h" 
 #include "SneakCharacter.generated.h"
 
 UCLASS()
@@ -20,6 +21,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	ADroneCharacter * Drone;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,22 +29,21 @@ public:
 	// Called to bind functionality to input when Character is possessed by Controller
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION() // TODO: try without these
+	virtual void PossessedBy(AController* NewController) override;
+
+	UFUNCTION() 
 	void MoveForward(float Value);
 
 	UFUNCTION()
 	void MoveRight(float Value);
 
 	UFUNCTION()
-	void Shoot();
-
-	UFUNCTION()
 	void Swap();
 
-	UPROPERTY(VisibleAnywhere) // Non-editable value, but exposed in editor
+	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPCameraComponent;
 
-	UPROPERTY(VisibleDefaultsOnly) // Instances will not see this in-editor
+	UPROPERTY(VisibleDefaultsOnly) 
 	USkeletalMeshComponent* FPMesh;
 
 	UPROPERTY(EditAnywhere)

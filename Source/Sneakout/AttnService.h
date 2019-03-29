@@ -32,6 +32,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UClass* AIClass;
+
+	UPROPERTY(EditAnywhere)
+	UClass* DroneClass;
 	
 	UPROPERTY(EditAnywhere)
 	float DetectRange = 600.f;
@@ -40,4 +43,5 @@ public:
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	TArray<AActor*> ActorsToIgnore;
 };

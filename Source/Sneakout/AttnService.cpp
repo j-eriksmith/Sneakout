@@ -20,8 +20,14 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
 	}
 	// Filter out other objects of this class
-	TArray<AActor*> ResultActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AIClass, ResultActors);
+	// Todo: cache this out once found once
+	if (ActorsToIgnore.Num() == 0)
+	{
+		TArray<AActor*> ResultDrones;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AIClass, ActorsToIgnore);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), DroneClass, ResultDrones);
+		ActorsToIgnore.Append(ResultDrones);
+	}
 
 	// Prepare params for sphere query
 	TArray< struct FHitResult > HitResults;
@@ -29,7 +35,7 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	FVector TraceEnd = Location + FVector(0.f, 0.f, 15.f);
 
 	// This could be a single trace, but leaving options open for now
-	UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Location, TraceEnd, DetectRange, DesiredObjectTypes, false, ResultActors, EDrawDebugTrace::None, HitResults, true);
+	UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Location, TraceEnd, DetectRange, DesiredObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::None, HitResults, true);
 
 	if (HitResults.Num() == 0)
 	{
@@ -43,7 +49,7 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		FHitResult SightHitResult;
 		FVector SightTraceEnd = HitResult.GetActor()->GetActorLocation();
 		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActors(ResultActors);
+		QueryParams.AddIgnoredActors(ActorsToIgnore);
 
 		if (GetWorld()->LineTraceSingleByChannel(SightHitResult, Location, SightTraceEnd, ECC_Camera, QueryParams))
 		{

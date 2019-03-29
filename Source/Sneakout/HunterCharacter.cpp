@@ -21,6 +21,7 @@ float AHunterCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 {
 	// Disable this lad
 	
+	Cast<AHunterController>(GetController())->SetCCState(CCState::Stunned);
 	return 0.0f;
 }
 
@@ -34,9 +35,6 @@ void AHunterCharacter::Tick(float DeltaTime)
 // Called to bind functionality to input
 void AHunterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-
-
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

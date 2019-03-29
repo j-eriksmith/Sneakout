@@ -6,9 +6,14 @@
 #include "AIController.h"
 #include "HunterController.generated.h"
 
-/**
- * 
- */
+UENUM(BlueprintType)
+enum class CCState : uint8 
+{
+	Stunned UMETA(DisplayName = "Stunned"),
+	None UMETA(DisplayName = "None"),
+};
+
+
 UCLASS()
 class SNEAKOUT_API AHunterController : public AAIController
 {
@@ -16,6 +21,8 @@ class SNEAKOUT_API AHunterController : public AAIController
 
 public:
 	AHunterController();
+
+	void SetCCState(CCState State);
 
 protected:
 	virtual void BeginPlay() override;
@@ -25,4 +32,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	UBehaviorTree* BehaviorTree;
+
+	UFUNCTION()
+	void ResetCCState();
+	
+	FTimerHandle StunTimerHandle;
 };
