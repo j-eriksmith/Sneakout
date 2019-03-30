@@ -32,7 +32,7 @@ void ASneakCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetMesh()->SetOwnerNoSee(true);
-	Drone = GetWorld()->SpawnActor<ADroneCharacter>(DroneClass, FVector(0.f,0.f,0.f), GetViewRotation());
+	Drone = GetWorld()->SpawnActor<ADroneCharacter>(DroneClass, DroneSpawnPoint, GetViewRotation());
 }
 
 // Called every frame
@@ -88,6 +88,23 @@ void ASneakCharacter::ShowWinPopup()
 		{
 			WinMenuHandle->AddToViewport();
 			PC->bShowMouseCursor = true;
+			DisableInput(PC);
+		}
+	}
+}
+
+void ASneakCharacter::ShowDefeatPopup()
+{
+	if (DefeatMenu)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		DefeatMenuHandle = CreateWidget<UUserWidget>(PC, DefeatMenu);
+
+		if (DefeatMenuHandle)
+		{
+			DefeatMenuHandle->AddToViewport();
+			PC->bShowMouseCursor = true;
+			DisableInput(PC);
 		}
 	}
 }

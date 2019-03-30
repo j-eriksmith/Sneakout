@@ -39,9 +39,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float DetectRange = 600.f;
 	
-	AHunterController* AIController;
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	TArray<AActor*> ActorsToIgnore;
+	AHunterController* AIController;
 };

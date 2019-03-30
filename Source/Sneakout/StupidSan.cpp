@@ -10,13 +10,6 @@ AStupidSan::AStupidSan()
 
 }
 
-// Called when the game starts or when spawned
-void AStupidSan::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 // Called every frame
 void AStupidSan::Tick(float DeltaTime)
 {
@@ -24,9 +17,8 @@ void AStupidSan::Tick(float DeltaTime)
 
 	FVector Location = GetActorLocation();
 	float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
-	Location.Z += DeltaHeight * magnitude;
+	Location.Z += DeltaHeight * Magnitude;
 	RunningTime += DeltaTime;
 	SetActorLocation(Location);
-
 }
 

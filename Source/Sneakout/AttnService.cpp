@@ -16,12 +16,9 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	if (!AIController)
-	{
-		AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
-	}
+	AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
+
 	// Filter out other objects of this class
-	// Todo: cache this out once found once
 	if (ActorsToIgnore.Num() <= 1)
 	{
 		TArray<AActor*> ResultDrones;
@@ -35,7 +32,6 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 	Location = AIController->GetPawn()->GetActorLocation();
 	FVector TraceEnd = Location + FVector(0.f, 0.f, 15.f);
 
-	// This could be a single trace, but leaving options open for now
 	UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), Location, TraceEnd, DetectRange, DesiredObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::None, HitResults, true);
 
 	if (HitResults.Num() == 0)

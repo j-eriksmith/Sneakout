@@ -11,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
+#include "TimerManager.h"
 
 // Sets default values
 ADroneCharacter::ADroneCharacter()
@@ -30,14 +31,17 @@ ADroneCharacter::ADroneCharacter()
 void ADroneCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	GetMesh()->SetOwnerNoSee(true);
 }
 
 // Called every frame
 void ADroneCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	if (!bCanShoot && ShootCurrentCD > 0.0f)
+	{
+		ShootCurrentCD -= DeltaTime;
+	}
 }
 
 // Called to bind functionality to input
@@ -56,16 +60,19 @@ void ADroneCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction("Swap", IE_Pressed, this, &ADroneCharacter::Swap);
 }
 
-void ADroneCharacter::RegisterPlayer(APawn* Player)
+void ADroneCharacter::RegisterPlayer(APawn * Player)
 {
-	if (!this->Player)
+	this->Player = Player;
+	
+	if (DroneHUD && !DroneHUDHandle)
 	{
-		this->Player = Player;
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		DroneHUDHandle = CreateWidget<UUserWidget>(GetWorld(), DroneHUD);
 	}
-}
-
-void ADroneCharacter::PossessedBy(AController* NewController)
-{
+	if (DroneHUDHandle && !bCanShoot)
+	{
+		DroneHUDHandle->AddToViewport();
+	}
 }
 
 void ADroneCharacter::MoveForward(float Value)
@@ -80,12 +87,14 @@ void ADroneCharacter::MoveRight(float Value)
 
 void ADroneCharacter::Shoot()
 {
+	if (!bCanShoot) return;
+
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
 	FVector ForwardVector = FPCameraComponent->GetForwardVector();
 
 	FVector TraceStart = FPCameraComponent->GetComponentLocation();
-	FVector TraceEnd = TraceStart + (ForwardVector * 5000.0f);
+	FVector TraceEnd = TraceStart + (ForwardVector * ShootRange);
 	
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
 	{
@@ -96,6 +105,14 @@ void ADroneCharacter::Shoot()
 			FDamageEvent DamageEvent(UDamageType::StaticClass());
 			float DamageAmount = 1.0f;
 			HitResult.GetActor()->TakeDamage(DamageAmount, DamageEvent, GetController(), this);
+
+			// Start cooldown timer on hit
+			bCanShoot = false;
+			GetWorld()->GetTimerManager().SetTimer(ShootCDHandle, this, &ADroneCharacter::ResetShootCD, ShootCD, false);
+			if (DroneHUDHandle)
+			{
+				DroneHUDHandle->AddToViewport();
+			}
 		}
 
 		// For box shenanigans
@@ -109,8 +126,22 @@ void ADroneCharacter::Shoot()
 void ADroneCharacter::Swap()
 {
 	// Player is registered
+	if (DroneHUDHandle)
+	{
+		DroneHUDHandle->RemoveFromViewport();
+	}
 	if (Player)
 	{
 		GetController()->Possess(Player);
+	}
+}
+
+void ADroneCharacter::ResetShootCD()
+{
+	bCanShoot = true;
+	ShootCurrentCD = ShootCD;
+	if (DroneHUDHandle)
+	{
+		DroneHUDHandle->RemoveFromViewport();
 	}
 }

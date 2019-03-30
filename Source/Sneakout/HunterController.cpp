@@ -16,6 +16,7 @@ void AHunterController::BeginPlay()
 	if (UseBlackboard(BlackboardData, Blackboard))
 	{
 		Blackboard->SetValueAsVector("Start", GetPawn()->GetActorLocation());
+		// Todo: load these from data source
 		Blackboard->SetValueAsFloat("StunDuration", 5.0f);
 		Blackboard->SetValueAsFloat("SightAngle", 1.0472f);
 		ResetCCState();

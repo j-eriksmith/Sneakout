@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Classes/Camera/CameraComponent.h"
+#include "UserWidget.h"
 #include "DroneCharacter.generated.h"
 
 UCLASS()
@@ -25,6 +26,14 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPCameraComponent;
 
+	UPROPERTY(EditDefaultsOnly)
+	float ShootRange = 500.0f;
+
+	FTimerHandle ShootCDHandle;
+
+	bool bCanShoot = true;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,9 +41,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void PossessedBy(AController* NewController) override;
-
-	void RegisterPlayer(APawn* Player);
+	void RegisterPlayer(APawn * Player);
 
 	UFUNCTION() 
 	void MoveForward(float Value);
@@ -47,4 +54,18 @@ public:
 
 	UFUNCTION()
 	void Swap();
+
+	UFUNCTION()
+	void ResetShootCD();
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	float ShootCD = 2.0f;
+
+	UPROPERTY(BlueprintReadOnly)
+	float ShootCurrentCD = ShootCD;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class UUserWidget> DroneHUD;
+
+	UUserWidget* DroneHUDHandle;
 };

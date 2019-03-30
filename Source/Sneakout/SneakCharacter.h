@@ -22,7 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	ADroneCharacter * Drone;
+	ADroneCharacter* Drone;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -31,6 +32,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void ShowWinPopup();
+
+	void ShowDefeatPopup();
+
+	void CheckForDeath();
 
 	UFUNCTION() 
 	void MoveForward(float Value);
@@ -53,5 +58,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	TSubclassOf<class UUserWidget> WinMenu;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class UUserWidget> DefeatMenu;
+
+	UPROPERTY(EditAnywhere)
+	FVector DroneSpawnPoint;
+
 	UUserWidget* WinMenuHandle;
+
+	UUserWidget* DefeatMenuHandle;
 };

@@ -12,24 +12,18 @@ EBTNodeResult::Type UMoveTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, ui
 {
 	//Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	if (!AIController)
-	{
-		AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
-	}
+	AIController = Cast<AHunterController>(OwnerComp.GetAIOwner());
 
 	AActor* MoveTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(TargetToFollow.SelectedKeyName));
 	EPathFollowingRequestResult::Type MoveResult = AIController->MoveToActor(MoveTarget, StopRadius, false);
 	switch (MoveResult)
 	{
 		case EPathFollowingRequestResult::RequestSuccessful:
-			UE_LOG(LogTemp, Warning, TEXT("In Progress"));
 			return EBTNodeResult::InProgress;
 		case EPathFollowingRequestResult::AlreadyAtGoal:
-			UE_LOG(LogTemp, Warning, TEXT("Task is at Goal"));
 			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 			return EBTNodeResult::Succeeded;
 		default:
-			UE_LOG(LogTemp, Warning, TEXT("Default Case - Failed"));
 			return EBTNodeResult::Failed;
 	}
 }

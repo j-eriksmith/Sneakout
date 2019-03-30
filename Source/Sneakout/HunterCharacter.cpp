@@ -27,11 +27,10 @@ float AHunterCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 void AHunterCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OverlapBegins"));
 	ASneakCharacter* SneakPlayer = Cast<ASneakCharacter>(OtherActor);
 	if (SneakPlayer)
 	{
-		SneakPlayer->ShowWinPopup();
+		SneakPlayer->ShowDefeatPopup();
 	}
 }
 
