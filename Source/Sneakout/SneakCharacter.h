@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Classes/Camera/CameraComponent.h"
 #include "DroneCharacter.h" 
+#include "UserWidget.h"
 #include "SneakCharacter.generated.h"
 
 UCLASS()
@@ -29,7 +30,7 @@ public:
 	// Called to bind functionality to input when Character is possessed by Controller
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void PossessedBy(AController* NewController) override;
+	void ShowWinPopup();
 
 	UFUNCTION() 
 	void MoveForward(float Value);
@@ -48,4 +49,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ADroneCharacter> DroneClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class UUserWidget> WinMenu;
+
+	UUserWidget* WinMenuHandle;
 };

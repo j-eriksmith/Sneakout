@@ -17,6 +17,7 @@ void AHunterController::BeginPlay()
 	{
 		Blackboard->SetValueAsVector("Start", GetPawn()->GetActorLocation());
 		Blackboard->SetValueAsFloat("StunDuration", 5.0f);
+		Blackboard->SetValueAsFloat("SightAngle", 1.0472f);
 		ResetCCState();
 		RunBehaviorTree(BehaviorTree);
 	}

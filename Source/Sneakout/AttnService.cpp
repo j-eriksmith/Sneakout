@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "GenericPlatformMath.h"
 
 UAttnService::UAttnService()
 {
@@ -42,6 +43,7 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 		AIController->GetBlackboardComponent()->SetValueAsObject(TargetToFollow.SelectedKeyName, nullptr);
 	}
 
+	bool bFoundTarget = false;
 	for (const FHitResult& HitResult : HitResults)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, HitResult.GetActor()->GetName());
@@ -53,14 +55,20 @@ void UAttnService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 		if (GetWorld()->LineTraceSingleByChannel(SightHitResult, Location, SightTraceEnd, ECC_Camera, QueryParams))
 		{
-			// We can see them, so set blackboard data on our AI's controller
-			AIController->GetBlackboardComponent()->SetValueAsVector(TargetLocation.SelectedKeyName, SightHitResult.GetActor()->GetActorLocation());
-			AIController->GetBlackboardComponent()->SetValueAsObject(TargetToFollow.SelectedKeyName, SightHitResult.GetActor());
+			FVector ToSightTarget = SightTraceEnd - Location;
+			float DegreesBetweeen = FPlatformMath::Acos(ToSightTarget.CosineAngle2D(AIController->GetPawn()->GetActorForwardVector()));
+			float DegreeThreshold = AIController->GetBlackboardComponent()->GetValueAsFloat("SightAngle");
+			if (DegreesBetweeen <= DegreeThreshold)
+			{
+				// We can see them, so set blackboard data on our AI's controller
+				AIController->GetBlackboardComponent()->SetValueAsVector(TargetLocation.SelectedKeyName, SightHitResult.GetActor()->GetActorLocation());
+				AIController->GetBlackboardComponent()->SetValueAsObject(TargetToFollow.SelectedKeyName, SightHitResult.GetActor());
+				bFoundTarget = true;
+			}
 		}
-		else
-		{
-			// We can't see the target
-			AIController->GetBlackboardComponent()->SetValueAsObject(TargetToFollow.SelectedKeyName, nullptr);
-		}
+	}
+	if (!bFoundTarget)
+	{
+		AIController->GetBlackboardComponent()->SetValueAsObject(TargetToFollow.SelectedKeyName, nullptr);
 	}
 }

@@ -9,6 +9,7 @@
 #include "Engine/EngineTypes.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -88,10 +89,10 @@ void ADroneCharacter::Shoot()
 	
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
 	{
-		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Blue, false, 3.0f);
 
 		if (HitResult.GetActor() != nullptr)
 		{
+			DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Blue, false, 5.0f);
 			FDamageEvent DamageEvent(UDamageType::StaticClass());
 			float DamageAmount = 1.0f;
 			HitResult.GetActor()->TakeDamage(DamageAmount, DamageEvent, GetController(), this);

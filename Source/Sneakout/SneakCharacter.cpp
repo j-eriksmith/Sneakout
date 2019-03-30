@@ -57,10 +57,6 @@ void ASneakCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction("Swap", IE_Pressed, this, &ASneakCharacter::Swap);
 }
 
-void ASneakCharacter::PossessedBy(AController* NewController)
-{
-}
-
 void ASneakCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector(), Value);
@@ -78,5 +74,20 @@ void ASneakCharacter::Swap()
 	{
 		Drone->RegisterPlayer(this);
 		GetController()->Possess(Drone);
+	}
+}
+
+void ASneakCharacter::ShowWinPopup()
+{
+	if (WinMenu)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		WinMenuHandle = CreateWidget<UUserWidget>(PC, WinMenu);
+
+		if (WinMenuHandle)
+		{
+			WinMenuHandle->AddToViewport();
+			PC->bShowMouseCursor = true;
+		}
 	}
 }
